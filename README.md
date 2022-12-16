@@ -59,7 +59,7 @@ For white backgrounds, uncomment this line in the css class, increase the alpha 
 
 If you use a different background for each mode like Darkish wallpaper when in Dark mode the text-color will be white & the opposite when using a white like wallpaper in Light mode
 
-uncomment this part to enable it, if you made your quote background a lot more darker you probably don't need to.
+The following is an example.
 
 ```css
     @media(prefers-color-scheme: light) {
