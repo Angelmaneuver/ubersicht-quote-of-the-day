@@ -1,0 +1,10 @@
+{
+	"name": "quote-of-the-day",
+	"version": "1.0.0",
+	"author": "Angelmaneuver",
+	"license": "MIT",
+	"description": "Packing tools.",
+	"scripts": {
+		"package": "zip -r quote-of-the-day.widget.zip quote-of-the-day.widget"
+	}
+}

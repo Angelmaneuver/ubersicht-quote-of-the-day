@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 α
+Customize for myself
+- Get the latest categories list from They Said So
+- Randomly select a category to display a citation
+- Not refresh
+- No local storage is used
+
 ## 0.2.2
 
 - Fixed a bug where the quote will not automatically update on the widget after updating the localStorage

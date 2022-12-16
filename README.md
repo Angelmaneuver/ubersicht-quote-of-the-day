@@ -1,6 +1,6 @@
 # Quote of the Day
 
-This a widget for [Übersïcht](http://tracesof.net/uebersicht/) that displays a random quote from [They Said So Quotes API](https://theysaidso.com/api/)
+This a widget for [Übersïcht](http://tracesof.net/uebersicht/) that displays a random quote from [They Said So Quotes API](https://theysaidso.com/api/).
 
 ## Installation
 
@@ -8,36 +8,39 @@ Download the quote-of-the-day.widget.zip and unzip it to your widgets folder (de
 
 ## Preview
 
-![quote-of-the-day.widget preview](https://github.com/stoneC0der/ubersicht-quote-of-the-day/blob/dev/screenshot.png?raw=true)
+![quote-of-the-day.widget preview](screenshot.png)
 
 ## Settings
 
 ### Refresh time
 
-A request is made every 6 hours, this is because I am not connected all day long so this make sure that the quote is updated everyday. You might want to set it to higher number
+The default is not to update. Change it if necessary.
 
 ```js
     // the refresh frequency in milliseconds
-    // 21600000 = every 6h Default
+    // 21600000 = every 6h
     // 43200000 = every 12h
     // 86400000 = every 24h / day
-    export const refreshFrequency = 21600000;
+    export const refreshFrequency = false;
 ````
 
 ### Quote
 
-The plugin use the public API no need for a key, the is retrieve from a category. The default is **Funny**
+The plugin use the public API no need for a key, the is retrieve from a category. The default is **randomly**.
 
 ### categories
 
-A category is automatically set when the widget is automatically refreshed.
+A category is automatically set when the widget is startup.
 Edit the file to set your desired categories
-here are the predefined categories: **"death", "love", "life", "funny", "inspire", "art"**
+here are the predefined categories.
 
 ```js
-    // Add/remove categories here, make sure that those categories exist on the endpoint 
-    // if you don't know how to, I suggest removing instead of adding
-    const categories = ["death", "love", "life", "funny", "inspire", "art"];
+    // If you want a particular category to always be displayed,
+    // configure as follows.
+    function getCategory(categories) {
+        // return categories[Math.floor(Math.random() * (categories.length))];
+        return { name: 'art' };
+    }
 ````
 
 ### Appearance
@@ -51,10 +54,7 @@ For white backgrounds, uncomment this line in the css class, increase the alpha 
 **Note**: There is now minimum background color by default.
 
 ```css
-    .quote-of-the-day::before 
-    {
-        background: rgba(9, 10, 13, 0.10);
-    }
+    background: rgba(9, 10, 13, 0.10);
 ````
 
 If you use a different background for each mode like Darkish wallpaper when in Dark mode the text-color will be white & the opposite when using a white like wallpaper in Light mode
@@ -62,32 +62,26 @@ If you use a different background for each mode like Darkish wallpaper when in D
 uncomment this part to enable it, if you made your quote background a lot more darker you probably don't need to.
 
 ```css
-    /*@media(prefers-color-scheme: light) {
+    @media(prefers-color-scheme: light) {
         color: #444444;
-    
-    .title {
-        color: #888888;
+
+        .author {
+            color: #666666;
+        }
     }
-    .author {
-        color: #666666;
-    }
-    }*/
 ````
 
 Edit the position by changing these settings:
 
 ```css
-    bottom: 100px;
+    bottom: 80px;
     left: 0; 
 ````
 
 To change the width of the container change this part according to your need
 
 ```css
-    .quote-of-the-day-container {
-        margin: 0 auto;
-        max-width: 960px;// no make it wider or narrowed
-    }
+    width: 50vw;
 ````
 
 #### Quote image
@@ -95,17 +89,10 @@ To change the width of the container change this part according to your need
 Comment line ** to hide the image
 
 ```html
-    <img className="image" src={image}/>
+    <img src = { props.output.background }/>
 ````
 
 ## Disclaimer
 
 I am not a react developer so, the widget might not be optimize I just edit the default file and throw in some Vanilla JavaScript.
-I use localStorage to limit the amount of request to the end point and to have the quote even when the network is down.
-
-## To Do
-
-- [x] Automatically set a random category every day
-- [] Add a button (Hidden) somewhere on the widget to show a drop down list on click and manually set the category in interactive mode
-- [] Errors handling
-- [] A fancy design (maybe) 😃
+~~I use localStorage to limit the amount of request to the end point and to have the quote even when the network is down.~~
