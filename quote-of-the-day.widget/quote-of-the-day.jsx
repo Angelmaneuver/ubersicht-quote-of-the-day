@@ -1,5 +1,7 @@
 import { React } from 'uebersicht';
 
+const API_KEY                 = ``;
+
 export const className        = `
 	bottom:        80px;
 	left:          0;
@@ -55,12 +57,12 @@ export const refreshFrequency = false;
 export const initialState     = { type: STATUS.STARTUP };
 
 export const init             = (dispatch) => {
-	fetch(
-		'https://quotes.rest/qod/categories?language=en&detailed=false'
-	).then((response) => response.json()
-	).then((data) => {
-		const categories = Object.keys(data.contents.categories).map((key) => {
-			return { name: key, description: data.contents.categories[key] };
+	$.get({
+		url:     'http://127.0.0.1:41417/https://quotes.rest/qod/categories?language=en&detailed=false',
+		headers: { 'X-Theysaidso-Api-Secret': API_KEY }
+	}).then((response) => {
+		const categories = Object.keys(response.contents.categories).map((key) => {
+			return { name: key, description: response.contents.categories[key] };
 		});
 
 		update(categories, dispatch);
@@ -96,11 +98,11 @@ export const render           = (props, dispatch) => {
 function update(categories, dispatch) {
 	const category = getCategory(categories);
 
-	fetch(
-		`https://quotes.rest/qod?category=${category.name}&language=en`
-	).then((response) => response.json()
-	).then((data) => {
-		const quote = data.contents.quotes[0];
+	$.get({
+		url:     'http://127.0.0.1:41417/https://quotes.rest/qod?category=${category.name}&language=en',
+		headers: { 'X-Theysaidso-Api-Secret': API_KEY }
+	}).then((response) => {
+		const quote = response.contents.quotes[0];
 
 		dispatch({
 			type:   STATUS.ACTIVE,
