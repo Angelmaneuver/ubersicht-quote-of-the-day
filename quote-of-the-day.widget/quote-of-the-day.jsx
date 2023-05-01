@@ -57,18 +57,30 @@ export const refreshFrequency = false;
 export const initialState     = { type: STATUS.STARTUP };
 
 export const init             = (dispatch) => {
-	$.get({
-		url:     'http://127.0.0.1:41417/https://quotes.rest/qod/categories?language=en&detailed=false',
-		headers: { 'X-Theysaidso-Api-Secret': API_KEY }
-	}).then((response) => {
-		const categories = Object.keys(response.contents.categories).map((key) => {
-			return { name: key, description: response.contents.categories[key] };
+	if (localStorage.getItem('lastUpdate') === today()) {
+		dispatch({
+			type:   STATUS.ACTIVE,
+			output: {
+				title:      localStorage.getItem('title'),
+				quote:      localStorage.getItem('quote'),
+				author:     localStorage.getItem('author'),
+				background: localStorage.getItem('background'),
+			},
 		});
+	} else {
+		$.get({
+			url:     'http://127.0.0.1:41417/https://quotes.rest/qod/categories?language=en&detailed=false',
+			headers: { 'X-Theysaidso-Api-Secret': API_KEY }
+		}).then((response) => {
+			const categories = Object.keys(response.contents.categories).map((key) => {
+				return { ...response.contents.categories[key] };
+			});
 
-		update(categories, dispatch);
-	}).catch(error => {
-		dispatch({ error: error.message });
-	});
+			update(categories, dispatch);
+		}).catch(error => {
+			dispatch({ error: error.message });
+		});
+	}
 }
 
 export const updateState      = (event, previousState) => {
@@ -95,14 +107,25 @@ export const render           = (props, dispatch) => {
 	);
 }
 
+function today() {
+	const now  = new Date();
+	return `${now.getFullYear()}/${now.getMonth()}/${now.getDate()}`;
+}
+
 function update(categories, dispatch) {
 	const category = getCategory(categories);
 
 	$.get({
-		url:     'http://127.0.0.1:41417/https://quotes.rest/qod?category=${category.name}&language=en',
+		url:     `http://127.0.0.1:41417/https://quotes.rest/qod?category=${category.name}&language=en`,
 		headers: { 'X-Theysaidso-Api-Secret': API_KEY }
 	}).then((response) => {
 		const quote = response.contents.quotes[0];
+
+		localStorage.setItem('lastUpdate', today());
+		localStorage.setItem('title',      quote.title);
+		localStorage.setItem('quote',      quote.quote);
+		localStorage.setItem('author',     quote.author);
+		localStorage.setItem('background', quote.background);
 
 		dispatch({
 			type:   STATUS.ACTIVE,
